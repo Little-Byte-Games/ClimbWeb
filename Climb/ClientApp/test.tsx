@@ -1,4 +1,4 @@
-import './css/site.css';
+import './css/test.less';
 import 'bootstrap';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
@@ -14,12 +14,10 @@ function renderApp() {
     // configuration and injects the app into a DOM element.
     const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href')!;
 
-    
-
     ReactDOM.render(
         <AppContainer>
             <div>
-                <span>Hello world</span>
+                <span id="header">Hello world</span>
                 <button onClick={loadWeather}>Load Weather</button>
             </div>
         </AppContainer>,
