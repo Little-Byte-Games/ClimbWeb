@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "2e0ee6545fd1f23ebd82"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "8bd5cafa4a54c2b05754"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -704,7 +704,7 @@
 /******/ 	__webpack_require__.h = function() { return hotCurrentHash; };
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return hotCreateRequire(209)(__webpack_require__.s = 209);
+/******/ 	return hotCreateRequire(210)(__webpack_require__.s = 210);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -774,29 +774,6 @@ module.exports = vendor_c889ec5b88b44f1aff8b;
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var baseIsNative = __webpack_require__(92),
-    getValue = __webpack_require__(113);
-
-/**
- * Gets the native function at `key` of `object`.
- *
- * @private
- * @param {Object} object The object to query.
- * @param {string} key The key of the method to get.
- * @returns {*} Returns the function if it's native, else `undefined`.
- */
-function getNative(object, key) {
-  var value = getValue(object, key);
-  return baseIsNative(value) ? value : undefined;
-}
-
-module.exports = getNative;
-
-
-/***/ }),
-/* 6 */
 /***/ (function(module, exports) {
 
 module.exports = function(originalModule) {
@@ -823,6 +800,29 @@ module.exports = function(originalModule) {
 	}
 	return module;
 };
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseIsNative = __webpack_require__(92),
+    getValue = __webpack_require__(113);
+
+/**
+ * Gets the native function at `key` of `object`.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @param {string} key The key of the method to get.
+ * @returns {*} Returns the function if it's native, else `undefined`.
+ */
+function getNative(object, key) {
+  var value = getValue(object, key);
+  return baseIsNative(value) ? value : undefined;
+}
+
+module.exports = getNative;
 
 
 /***/ }),
@@ -1075,7 +1075,7 @@ module.exports = getMapData;
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(5);
+var getNative = __webpack_require__(6);
 
 /* Built-in method references that are verified to be native. */
 var nativeCreate = getNative(Object, 'create');
@@ -1237,8 +1237,7 @@ module.exports = keys;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* WEBPACK VAR INJECTION */(function(process, module) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "routes", function() { return routes; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* WEBPACK VAR INJECTION */(function(process, module) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router_dom__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Layout__ = __webpack_require__(185);
@@ -1251,14 +1250,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-var routes = __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_2__components_Layout__["a" /* Layout */], null,
+
+const routes = __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_2__components_Layout__["a" /* Layout */], null,
     __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_1_react_router_dom__["Route"], { exact: true, path: '/', component: __WEBPACK_IMPORTED_MODULE_3__components_Home__["a" /* Home */] }),
     __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_1_react_router_dom__["Route"], { path: '/counter', component: __WEBPACK_IMPORTED_MODULE_5__components_Counter__["a" /* Counter */] }),
     __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_1_react_router_dom__["Route"], { path: '/fetchdata', component: __WEBPACK_IMPORTED_MODULE_4__components_FetchData__["a" /* FetchData */] }));
+/* harmony export (immutable) */ __webpack_exports__["routes"] = routes;
+
 
 
  ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Projects\\Git\\ClimbWeb\\Climb\\ClientApp\\routes.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Projects\\Git\\ClimbWeb\\Climb\\ClientApp\\routes.tsx"); } } })();
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1), __webpack_require__(6)(module)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1), __webpack_require__(5)(module)))
 
 /***/ }),
 /* 21 */
@@ -1305,7 +1307,7 @@ exports.push([module.i, ".main-nav li .glyphicon {\r\n    margin-right: 10px;\r\
 /* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(5),
+var getNative = __webpack_require__(6),
     root = __webpack_require__(2);
 
 /* Built-in method references that are verified to be native. */
@@ -2163,7 +2165,7 @@ module.exports = castPath;
 /* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(5);
+var getNative = __webpack_require__(6);
 
 var defineProperty = (function() {
   try {
@@ -3669,7 +3671,7 @@ module.exports = XmlEntities;
 /* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(5),
+var getNative = __webpack_require__(6),
     root = __webpack_require__(2);
 
 /* Built-in method references that are verified to be native. */
@@ -3720,7 +3722,7 @@ module.exports = Hash;
 /* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(5),
+var getNative = __webpack_require__(6),
     root = __webpack_require__(2);
 
 /* Built-in method references that are verified to be native. */
@@ -3733,7 +3735,7 @@ module.exports = Promise;
 /* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(5),
+var getNative = __webpack_require__(6),
     root = __webpack_require__(2);
 
 /* Built-in method references that are verified to be native. */
@@ -3758,7 +3760,7 @@ module.exports = Uint8Array;
 /* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(5),
+var getNative = __webpack_require__(6),
     root = __webpack_require__(2);
 
 /* Built-in method references that are verified to be native. */
@@ -7722,86 +7724,61 @@ if (!module.hot || process.env.NODE_ENV === 'production') {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process, module) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Counter; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* WEBPACK VAR INJECTION */(function(process, module) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 
-var Counter = (function (_super) {
-    __extends(Counter, _super);
-    function Counter() {
-        var _this = _super.call(this) || this;
-        _this.state = { currentCount: 0 };
-        return _this;
+
+class Counter extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+    constructor() {
+        super();
+        this.state = { currentCount: 0 };
     }
-    Counter.prototype.render = function () {
-        var _this = this;
+    render() {
         return __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", null,
             __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("h1", null, "Counter"),
             __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("p", null, "This is a simple example of a React component."),
             __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("p", null,
                 "Current count: ",
                 __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("strong", null, this.state.currentCount)),
-            __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("button", { onClick: function () { _this.incrementCounter(); } }, "Increment"));
-    };
-    Counter.prototype.incrementCounter = function () {
+            __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("button", { onClick: () => { this.incrementCounter(); } }, "Increment"));
+    }
+    incrementCounter() {
         this.setState({
             currentCount: this.state.currentCount + 1
         });
-    };
-    return Counter;
-}(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]));
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Counter;
 
 
 
  ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Projects\\Git\\ClimbWeb\\Climb\\ClientApp\\components\\Counter.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Projects\\Git\\ClimbWeb\\Climb\\ClientApp\\components\\Counter.tsx"); } } })();
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1), __webpack_require__(6)(module)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1), __webpack_require__(5)(module)))
 
 /***/ }),
 /* 183 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process, module) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FetchData; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* WEBPACK VAR INJECTION */(function(process, module) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_isomorphic_fetch__ = __webpack_require__(206);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_isomorphic_fetch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_isomorphic_fetch__);
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 
 
-var FetchData = (function (_super) {
-    __extends(FetchData, _super);
-    function FetchData() {
-        var _this = _super.call(this) || this;
-        _this.state = { forecasts: [], loading: true };
+
+class FetchData extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+    constructor() {
+        super();
+        this.state = { forecasts: [], loading: true };
         fetch('api/v1/SampleData/WeatherForecasts')
-            .then(function (response) { return response.json(); })
-            .then(function (data) {
-            _this.setState({ forecasts: data, loading: false });
+            .then(response => response.json())
+            .then(data => {
+            this.setState({ forecasts: data, loading: false });
         });
-        return _this;
     }
-    FetchData.prototype.render = function () {
-        var contents = this.state.loading
+    render() {
+        let contents = this.state.loading
             ? __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("p", null,
                 __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("em", null, "Loading..."))
             : FetchData.renderForecastsTable(this.state.forecasts);
@@ -7809,8 +7786,8 @@ var FetchData = (function (_super) {
             __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("h1", null, "Weather forecast"),
             __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("p", null, "This component demonstrates fetching data from the server."),
             contents);
-    };
-    FetchData.renderForecastsTable = function (forecasts) {
+    }
+    static renderForecastsTable(forecasts) {
         return __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("table", { className: 'table' },
             __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("thead", null,
                 __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("tr", null,
@@ -7818,47 +7795,31 @@ var FetchData = (function (_super) {
                     __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("th", null, "Temp. (C)"),
                     __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("th", null, "Temp. (F)"),
                     __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("th", null, "Summary"))),
-            __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("tbody", null, forecasts.map(function (forecast) {
-                return __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("tr", { key: forecast.dateFormatted },
-                    __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("td", null, forecast.dateFormatted),
-                    __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("td", null, forecast.temperatureC),
-                    __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("td", null, forecast.temperatureF),
-                    __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("td", null, forecast.summary));
-            })));
-    };
-    return FetchData;
-}(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]));
+            __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("tbody", null, forecasts.map(forecast => __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("tr", { key: forecast.dateFormatted },
+                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("td", null, forecast.dateFormatted),
+                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("td", null, forecast.temperatureC),
+                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("td", null, forecast.temperatureF),
+                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("td", null, forecast.summary)))));
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = FetchData;
 
 
 
  ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Projects\\Git\\ClimbWeb\\Climb\\ClientApp\\components\\FetchData.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Projects\\Git\\ClimbWeb\\Climb\\ClientApp\\components\\FetchData.tsx"); } } })();
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1), __webpack_require__(6)(module)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1), __webpack_require__(5)(module)))
 
 /***/ }),
 /* 184 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process, module) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Home; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* WEBPACK VAR INJECTION */(function(process, module) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 
-var Home = (function (_super) {
-    __extends(Home, _super);
-    function Home() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Home.prototype.render = function () {
+
+class Home extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+    render() {
         return __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", null,
             __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("h1", null, "Hello, world!"),
             __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("p", null, "Welcome to your new single-page application, built with:"),
@@ -7910,83 +7871,55 @@ var Home = (function (_super) {
                 " applications), you should consider using a Flux/Redux-like architecture. You can generate an ASP.NET Core application with React and Redux using ",
                 __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("code", null, "dotnet new reactredux"),
                 " instead of using this template."));
-    };
-    return Home;
-}(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]));
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Home;
 
 
 
  ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Projects\\Git\\ClimbWeb\\Climb\\ClientApp\\components\\Home.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Projects\\Git\\ClimbWeb\\Climb\\ClientApp\\components\\Home.tsx"); } } })();
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1), __webpack_require__(6)(module)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1), __webpack_require__(5)(module)))
 
 /***/ }),
 /* 185 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process, module) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Layout; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* WEBPACK VAR INJECTION */(function(process, module) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__NavMenu__ = __webpack_require__(186);
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 
 
-var Layout = (function (_super) {
-    __extends(Layout, _super);
-    function Layout() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Layout.prototype.render = function () {
+
+class Layout extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+    render() {
         return __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: 'container-fluid' },
             __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: 'row' },
                 __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: 'col-sm-3' },
                     __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_1__NavMenu__["a" /* NavMenu */], null)),
                 __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: 'col-sm-9' }, this.props.children)));
-    };
-    return Layout;
-}(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]));
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Layout;
 
 
 
  ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Projects\\Git\\ClimbWeb\\Climb\\ClientApp\\components\\Layout.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Projects\\Git\\ClimbWeb\\Climb\\ClientApp\\components\\Layout.tsx"); } } })();
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1), __webpack_require__(6)(module)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1), __webpack_require__(5)(module)))
 
 /***/ }),
 /* 186 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process, module) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NavMenu; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* WEBPACK VAR INJECTION */(function(process, module) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router_dom__ = __webpack_require__(31);
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 
 
-var NavMenu = (function (_super) {
-    __extends(NavMenu, _super);
-    function NavMenu() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    NavMenu.prototype.render = function () {
+
+class NavMenu extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+    render() {
         return __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: 'main-nav' },
             __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: 'navbar navbar-inverse' },
                 __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: 'navbar-header' },
@@ -8011,14 +7944,14 @@ var NavMenu = (function (_super) {
                             __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_1_react_router_dom__["NavLink"], { to: '/fetchdata', activeClassName: 'active' },
                                 __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("span", { className: 'glyphicon glyphicon-th-list' }),
                                 " Fetch data"))))));
-    };
-    return NavMenu;
-}(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]));
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = NavMenu;
 
 
 
  ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Projects\\Git\\ClimbWeb\\Climb\\ClientApp\\components\\NavMenu.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Projects\\Git\\ClimbWeb\\Climb\\ClientApp\\components\\NavMenu.tsx"); } } })();
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1), __webpack_require__(6)(module)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1), __webpack_require__(5)(module)))
 
 /***/ }),
 /* 187 */
@@ -12970,18 +12903,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-var routes = __WEBPACK_IMPORTED_MODULE_6__routes__["routes"];
+
+let routes = __WEBPACK_IMPORTED_MODULE_6__routes__["routes"];
 function renderApp() {
     // This code starts up the React app when it runs in a browser. It sets up the routing
     // configuration and injects the app into a DOM element.
-    var baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
+    const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
     __WEBPACK_IMPORTED_MODULE_3_react_dom__["render"](__WEBPACK_IMPORTED_MODULE_2_react__["createElement"](__WEBPACK_IMPORTED_MODULE_4_react_hot_loader__["AppContainer"], null,
         __WEBPACK_IMPORTED_MODULE_2_react__["createElement"](__WEBPACK_IMPORTED_MODULE_5_react_router_dom__["BrowserRouter"], { children: routes, basename: baseUrl })), document.getElementById('react-app'));
 }
 renderApp();
 // Allow Hot Module Replacement
 if (true) {
-    module.hot.accept(20, function(__WEBPACK_OUTDATED_DEPENDENCIES__) { /* harmony import */ __WEBPACK_IMPORTED_MODULE_6__routes__ = __webpack_require__(20); (function () {
+    module.hot.accept(20, function(__WEBPACK_OUTDATED_DEPENDENCIES__) { /* harmony import */ __WEBPACK_IMPORTED_MODULE_6__routes__ = __webpack_require__(20); (() => {
         routes = __webpack_require__(20).routes;
         renderApp();
     })(__WEBPACK_OUTDATED_DEPENDENCIES__); });
@@ -12989,11 +12923,12 @@ if (true) {
 
 
  ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Projects\\Git\\ClimbWeb\\Climb\\ClientApp\\boot.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Projects\\Git\\ClimbWeb\\Climb\\ClientApp\\boot.tsx"); } } })();
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1), __webpack_require__(6)(module)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1), __webpack_require__(5)(module)))
 
 /***/ }),
 /* 208 */,
-/* 209 */
+/* 209 */,
+/* 210 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(60);
