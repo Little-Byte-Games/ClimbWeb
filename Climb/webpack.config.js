@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 const bundleOutputDir = './wwwroot/dist';
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = (env) => {
     const isDevBuild = !(env && env.prod);
@@ -39,7 +40,7 @@ module.exports = (env) => {
             })
         ] : [
             // Plugins that apply in production builds only
-            new webpack.optimize.UglifyJsPlugin(),
+            new UglifyJsPlugin(),
             new ExtractTextPlugin('site.css')
         ])
     }];
