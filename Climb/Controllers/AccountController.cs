@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -31,7 +32,8 @@ namespace Climb.Controllers
         }
 
         [HttpPost("/api/v1/account/register")]
-        [SwaggerResponse(typeof(ApplicationUser))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, null)]
+        [SwaggerResponse(HttpStatusCode.OK, typeof(ApplicationUser))]
         public async Task<IActionResult> Register(RegisterRequest request)
         {
             if (ModelState.IsValid)
@@ -55,6 +57,22 @@ namespace Climb.Controllers
                 }
             }
 
+            return BadRequest();
+        }
+
+        [HttpPost("/api/v1/account/logIn")]
+        [SwaggerResponse(HttpStatusCode.BadRequest, null)]
+        [SwaggerResponse(HttpStatusCode.OK, null)]
+        public async Task<IActionResult> LogIn(string email, string password)
+        {
+            var result = await signInManager.PasswordSignInAsync(email, password, true, false);
+            if (result.Succeeded)
+            {
+                logger.LogInformation("User logged in.");
+                return Ok();
+            }
+
+            logger.LogInformation("User login failed.");
             return BadRequest();
         }
 
