@@ -4,10 +4,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { BrowserRouter } from 'react-router-dom';
-import { Route } from 'react-router-dom';
 import { Layout } from '../components/account/Layout';
-import { Login } from '../components/account/Login';
-import { Register } from '../components/account/Register';
 
 function renderApp() {
     // This code starts up the React app when it runs in a browser. It sets up the routing
