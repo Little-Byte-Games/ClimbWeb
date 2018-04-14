@@ -10,7 +10,6 @@ using NSwag.Annotations;
 
 namespace Climb.Controllers
 {
-    [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
@@ -26,9 +25,12 @@ namespace Climb.Controllers
             this.emailSender = emailSender;
         }
 
-        public IActionResult Test()
+        [Route("/account/{*page}")]
+        public IActionResult Index()
         {
-            return View();
+            ViewData["Title"] = "Account";
+            ViewData["Script"] = "account";
+            return View("~/Views/Page.cshtml");
         }
 
         [HttpPost("/api/v1/account/register")]

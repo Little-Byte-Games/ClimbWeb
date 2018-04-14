@@ -11,7 +11,7 @@ module.exports = (env) => {
         stats: { modules: false },
         entry: {
             'main': './ClientApp/boot.tsx',
-            'test': './ClientApp/test.tsx'
+            'pages/account': './ClientApp/pages/account.tsx'
         },
         resolve: { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
         output: {
