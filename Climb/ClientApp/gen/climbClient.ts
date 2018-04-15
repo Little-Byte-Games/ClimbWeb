@@ -18,8 +18,8 @@ export class AccountClient {
         this.baseUrl = baseUrl ? baseUrl : "http://localhost:52912";
     }
 
-    test(): Promise<FileResponse | null> {
-        let url_ = this.baseUrl + "/Account/Test";
+    index(): Promise<FileResponse | null> {
+        let url_ = this.baseUrl + "/account";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -31,11 +31,11 @@ export class AccountClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processTest(_response);
+            return this.processIndex(_response);
         });
     }
 
-    protected processTest(response: Response): Promise<FileResponse | null> {
+    protected processIndex(response: Response): Promise<FileResponse | null> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200 || status === 206) {
@@ -51,8 +51,100 @@ export class AccountClient {
         return Promise.resolve<FileResponse | null>(<any>null);
     }
 
+    register(email: string | null, password: string | null, confirmPassword: string | null | undefined): Promise<ApplicationUser | null> {
+        let url_ = this.baseUrl + "/api/v1/account/register?";
+        if (email === undefined)
+            throw new Error("The parameter 'email' must be defined.");
+        else
+            url_ += "email=" + encodeURIComponent("" + email) + "&"; 
+        if (password === undefined)
+            throw new Error("The parameter 'password' must be defined.");
+        else
+            url_ += "password=" + encodeURIComponent("" + password) + "&"; 
+        if (confirmPassword !== undefined)
+            url_ += "confirmPassword=" + encodeURIComponent("" + confirmPassword) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processRegister(_response);
+        });
+    }
+
+    protected processRegister(response: Response): Promise<ApplicationUser | null> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("A server error occurred.", status, _responseText, _headers);
+            });
+        } else if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? ApplicationUser.fromJS(resultData200) : <any>null;
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ApplicationUser | null>(<any>null);
+    }
+
+    logIn(email: string | null, password: string | null): Promise<void> {
+        let url_ = this.baseUrl + "/api/v1/account/logIn?";
+        if (email === undefined)
+            throw new Error("The parameter 'email' must be defined.");
+        else
+            url_ += "email=" + encodeURIComponent("" + email) + "&"; 
+        if (password === undefined)
+            throw new Error("The parameter 'password' must be defined.");
+        else
+            url_ += "password=" + encodeURIComponent("" + password) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json", 
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processLogIn(_response);
+        });
+    }
+
+    protected processLogIn(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("A server error occurred.", status, _responseText, _headers);
+            });
+        } else if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
     logout(): Promise<FileResponse | null> {
-        let url_ = this.baseUrl + "/Account/Logout";
+        let url_ = this.baseUrl + "/api/Account";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -69,6 +161,50 @@ export class AccountClient {
     }
 
     protected processLogout(response: Response): Promise<FileResponse | null> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse | null>(<any>null);
+    }
+}
+
+export class UserClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : <any>window;
+        this.baseUrl = baseUrl ? baseUrl : "http://localhost:52912";
+    }
+
+    index(): Promise<FileResponse | null> {
+        let url_ = this.baseUrl + "/user";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processIndex(_response);
+        });
+    }
+
+    protected processIndex(response: Response): Promise<FileResponse | null> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200 || status === 206) {
@@ -133,6 +269,156 @@ export class SampleDataClient {
         }
         return Promise.resolve<WeatherForecast[] | null>(<any>null);
     }
+}
+
+export class IdentityUserOfString implements IIdentityUserOfString {
+    id?: string | undefined;
+    userName?: string | undefined;
+    normalizedUserName?: string | undefined;
+    email?: string | undefined;
+    normalizedEmail?: string | undefined;
+    emailConfirmed: boolean;
+    passwordHash?: string | undefined;
+    securityStamp?: string | undefined;
+    concurrencyStamp?: string | undefined;
+    phoneNumber?: string | undefined;
+    phoneNumberConfirmed: boolean;
+    twoFactorEnabled: boolean;
+    lockoutEnd?: Date | undefined;
+    lockoutEnabled: boolean;
+    accessFailedCount: number;
+
+    constructor(data?: IIdentityUserOfString) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.userName = data["userName"];
+            this.normalizedUserName = data["normalizedUserName"];
+            this.email = data["email"];
+            this.normalizedEmail = data["normalizedEmail"];
+            this.emailConfirmed = data["emailConfirmed"];
+            this.passwordHash = data["passwordHash"];
+            this.securityStamp = data["securityStamp"];
+            this.concurrencyStamp = data["concurrencyStamp"];
+            this.phoneNumber = data["phoneNumber"];
+            this.phoneNumberConfirmed = data["phoneNumberConfirmed"];
+            this.twoFactorEnabled = data["twoFactorEnabled"];
+            this.lockoutEnd = data["lockoutEnd"] ? new Date(data["lockoutEnd"].toString()) : <any>undefined;
+            this.lockoutEnabled = data["lockoutEnabled"];
+            this.accessFailedCount = data["accessFailedCount"];
+        }
+    }
+
+    static fromJS(data: any): IdentityUserOfString {
+        data = typeof data === 'object' ? data : {};
+        let result = new IdentityUserOfString();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["userName"] = this.userName;
+        data["normalizedUserName"] = this.normalizedUserName;
+        data["email"] = this.email;
+        data["normalizedEmail"] = this.normalizedEmail;
+        data["emailConfirmed"] = this.emailConfirmed;
+        data["passwordHash"] = this.passwordHash;
+        data["securityStamp"] = this.securityStamp;
+        data["concurrencyStamp"] = this.concurrencyStamp;
+        data["phoneNumber"] = this.phoneNumber;
+        data["phoneNumberConfirmed"] = this.phoneNumberConfirmed;
+        data["twoFactorEnabled"] = this.twoFactorEnabled;
+        data["lockoutEnd"] = this.lockoutEnd ? this.lockoutEnd.toISOString() : <any>undefined;
+        data["lockoutEnabled"] = this.lockoutEnabled;
+        data["accessFailedCount"] = this.accessFailedCount;
+        return data; 
+    }
+}
+
+export interface IIdentityUserOfString {
+    id?: string | undefined;
+    userName?: string | undefined;
+    normalizedUserName?: string | undefined;
+    email?: string | undefined;
+    normalizedEmail?: string | undefined;
+    emailConfirmed: boolean;
+    passwordHash?: string | undefined;
+    securityStamp?: string | undefined;
+    concurrencyStamp?: string | undefined;
+    phoneNumber?: string | undefined;
+    phoneNumberConfirmed: boolean;
+    twoFactorEnabled: boolean;
+    lockoutEnd?: Date | undefined;
+    lockoutEnabled: boolean;
+    accessFailedCount: number;
+}
+
+export class IdentityUser extends IdentityUserOfString implements IIdentityUser {
+
+    constructor(data?: IIdentityUser) {
+        super(data);
+    }
+
+    init(data?: any) {
+        super.init(data);
+        if (data) {
+        }
+    }
+
+    static fromJS(data: any): IdentityUser {
+        data = typeof data === 'object' ? data : {};
+        let result = new IdentityUser();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface IIdentityUser extends IIdentityUserOfString {
+}
+
+export class ApplicationUser extends IdentityUser implements IApplicationUser {
+
+    constructor(data?: IApplicationUser) {
+        super(data);
+    }
+
+    init(data?: any) {
+        super.init(data);
+        if (data) {
+        }
+    }
+
+    static fromJS(data: any): ApplicationUser {
+        data = typeof data === 'object' ? data : {};
+        let result = new ApplicationUser();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface IApplicationUser extends IIdentityUser {
 }
 
 export class WeatherForecast implements IWeatherForecast {
