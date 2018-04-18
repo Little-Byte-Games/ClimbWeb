@@ -1,23 +1,24 @@
-﻿using Climb.Data;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Climb.Data;
+using Climb.Extensions;
 using Climb.Requests;
+using Climb.Responses;
 using Climb.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using NSwag.Annotations;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using Climb.Extensions;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Climb.Controllers
 {
+    [AllowAnonymous]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
@@ -48,11 +49,11 @@ namespace Climb.Controllers
         [SwaggerResponse(HttpStatusCode.OK, typeof(ApplicationUser))]
         public async Task<IActionResult> Register(RegisterRequest request)
         {
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = request.Email, Email = request.Email };
+                var user = new ApplicationUser {UserName = request.Email, Email = request.Email};
                 var result = await userManager.CreateAsync(user, request.Password);
-                if (result.Succeeded)
+                if(result.Succeeded)
                 {
                     logger.LogInformation("User created a new account with password.");
 
@@ -63,7 +64,8 @@ namespace Climb.Controllers
                     await signInManager.SignInAsync(user, false);
                     return Ok(user);
                 }
-                foreach (var error in result.Errors)
+
+                foreach(var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
@@ -74,11 +76,11 @@ namespace Climb.Controllers
 
         [HttpPost("/api/v1/account/logIn")]
         [SwaggerResponse(HttpStatusCode.BadRequest, null)]
-        [SwaggerResponse(HttpStatusCode.OK, typeof(string), IsNullable = false)]
+        [SwaggerResponse(HttpStatusCode.OK, typeof(LoginResponse), IsNullable = false)]
         public async Task<IActionResult> LogIn(string email, string password)
         {
             var result = await signInManager.PasswordSignInAsync(email, password, true, false);
-            if (result.Succeeded)
+            if(result.Succeeded)
             {
                 logger.LogInformation("User logged in.");
 
@@ -98,18 +100,11 @@ namespace Climb.Controllers
 
                 var serializedToken = new JwtSecurityTokenHandler().WriteToken(token);
 
-                return Ok(new {token = serializedToken});
+                return Ok(new LoginResponse(serializedToken));
             }
 
             logger.LogInformation("User login failed.");
             return BadRequest();
-        }
-
-        [Authorize]
-        [HttpGet("/api/v1/account/test")]
-        public IActionResult Test()
-        {
-            return Ok("Authorized!");
         }
 
         [HttpPost]

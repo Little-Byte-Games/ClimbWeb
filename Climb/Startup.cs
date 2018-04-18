@@ -14,6 +14,8 @@ using NJsonSchema;
 using NSwag.AspNetCore;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace Climb
 {
@@ -56,7 +58,13 @@ namespace Climb
                     options.SaveToken = true;
                 });
 
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
 
             services.AddSingleton<IEmailSender, EmailSender>();
         }
