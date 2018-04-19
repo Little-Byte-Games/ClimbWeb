@@ -18,7 +18,6 @@ using NSwag.Annotations;
 
 namespace Climb.Controllers
 {
-    [AllowAnonymous]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
@@ -74,6 +73,7 @@ namespace Climb.Controllers
             return BadRequest();
         }
 
+        [AllowAnonymous]
         [HttpPost("/api/v1/account/logIn")]
         [SwaggerResponse(HttpStatusCode.BadRequest, null)]
         [SwaggerResponse(HttpStatusCode.OK, typeof(LoginResponse), IsNullable = false)]
@@ -90,21 +90,31 @@ namespace Climb.Controllers
                 };
 
                 var credentials = new SigningCredentials(configuration.GetSecurityKey(), SecurityAlgorithms.HmacSha256);
+                var expires = DateTime.Now.AddMinutes(30);
 
                 var token = new JwtSecurityToken(
                     issuer: "climb.com",
                     audience: "climb",
                     claims: claims,
-                    expires: DateTime.Now.AddMinutes(30),
+                    expires: expires,
                     signingCredentials: credentials);
 
                 var serializedToken = new JwtSecurityTokenHandler().WriteToken(token);
+                serializedToken = $"Bearer {serializedToken}";
 
                 return Ok(new LoginResponse(serializedToken));
             }
 
             logger.LogInformation("User login failed.");
             return BadRequest();
+        }
+
+        [Authorize]
+        [SwaggerResponse(HttpStatusCode.OK, typeof(string))]
+        [HttpGet("/api/v1/account/test")]
+        public IActionResult Test()
+        {
+            return Ok("Authorized!");
         }
 
         [HttpPost]
