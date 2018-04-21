@@ -1,7 +1,5 @@
 ﻿using System;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Climb.Data;
 using Climb.Extensions;
@@ -13,7 +11,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using NSwag.Annotations;
 
 namespace Climb.Controllers
@@ -25,14 +22,16 @@ namespace Climb.Controllers
         private readonly ILogger logger;
         private readonly IEmailSender emailSender;
         private readonly IConfiguration configuration;
+        private readonly ITokenHelper tokenHelper;
 
-        public AccountController(SignInManager<ApplicationUser> signInManager, ILogger<AccountController> logger, UserManager<ApplicationUser> userManager, IEmailSender emailSender, IConfiguration configuration)
+        public AccountController(SignInManager<ApplicationUser> signInManager, ILogger<AccountController> logger, UserManager<ApplicationUser> userManager, IEmailSender emailSender, IConfiguration configuration, ITokenHelper tokenHelper)
         {
             this.signInManager = signInManager;
             this.logger = logger;
             this.userManager = userManager;
             this.emailSender = emailSender;
             this.configuration = configuration;
+            this.tokenHelper = tokenHelper;
         }
 
         [HttpGet("/account/{*page}")]
@@ -84,25 +83,9 @@ namespace Climb.Controllers
             {
                 logger.LogInformation("User logged in.");
 
-                var claims = new[]
-                {
-                    new Claim(ClaimTypes.Email, email)
-                };
+                var token = tokenHelper.CreateUserToken(configuration.GetSecurityKey(), DateTime.Now.AddMinutes(30), email);
 
-                var credentials = new SigningCredentials(configuration.GetSecurityKey(), SecurityAlgorithms.HmacSha256);
-                var expires = DateTime.Now.AddMinutes(30);
-
-                var token = new JwtSecurityToken(
-                    issuer: "climb.com",
-                    audience: "climb",
-                    claims: claims,
-                    expires: expires,
-                    signingCredentials: credentials);
-
-                var serializedToken = new JwtSecurityTokenHandler().WriteToken(token);
-                serializedToken = $"Bearer {serializedToken}";
-
-                return Ok(new LoginResponse(serializedToken));
+                return Ok(new LoginResponse(token));
             }
 
             logger.LogInformation("User login failed.");
@@ -112,9 +95,16 @@ namespace Climb.Controllers
         [Authorize]
         [SwaggerResponse(HttpStatusCode.OK, typeof(string))]
         [HttpGet("/api/v1/account/test")]
-        public IActionResult Test()
+        public async Task<IActionResult> Test([FromHeader(Name = "Authorization")] string authorization, string userId)
         {
-            return Ok("Authorized!");
+            var authorizedId = await tokenHelper.GetAuthorizedUserID(authorization);
+
+            if(userId == authorizedId)
+            {
+                return Ok("Authorized!");
+            }
+
+            return BadRequest("Not the same user!");
         }
 
         [HttpPost]

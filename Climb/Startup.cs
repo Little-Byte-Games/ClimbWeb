@@ -2,6 +2,7 @@ using System.Reflection;
 using Climb.Data;
 using Climb.Extensions;
 using Climb.Services;
+using Climb.Services.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -57,7 +58,10 @@ namespace Climb
 
             services.AddMvc();
 
+            services.AddTransient<IApplicationUserRepository, ApplicationUserRepository>();
+
             services.AddSingleton<IEmailSender, EmailSender>();
+            services.AddTransient<ITokenHelper, TokenHelper>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

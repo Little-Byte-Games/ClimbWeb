@@ -42,7 +42,7 @@ export class Login extends React.Component<RouteComponentProps<{}>, ILoginState>
                        e.preventDefault();
 
                        const accountClient = new AccountClient("http://192.168.196.1:45455");
-                       accountClient.test()
+                       accountClient.test(accountClient.getAuthorizationToken(), "123456789")
                            .then(value => console.log(value))
                            .catch(reason => alert(reason));
 

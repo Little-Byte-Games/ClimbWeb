@@ -8,9 +8,8 @@
 
 export module ClimbClient {
 export class BaseClass {
-    protected transformOptions(options: any) {
-        options.headers.Authorization = localStorage.getItem("jwt");
-        return Promise.resolve(options);
+    getAuthorizationToken() {
+        return localStorage.getItem("jwt");
     }
 }
 
@@ -160,13 +159,18 @@ export class AccountClient extends BaseClass {
         return Promise.resolve<LoginResponse>(<any>null);
     }
 
-    test(): Promise<string | null> {
-        let url_ = this.baseUrl + "/api/v1/account/test";
+    test(authorization: string | null | undefined, userId: string | null): Promise<string | null> {
+        let url_ = this.baseUrl + "/api/v1/account/test?";
+        if (userId === undefined)
+            throw new Error("The parameter 'userId' must be defined.");
+        else
+            url_ += "userId=" + encodeURIComponent("" + userId) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
             method: "GET",
             headers: {
+                "Authorization": authorization !== undefined && authorization !== null ? "" + authorization : "", 
                 "Content-Type": "application/json", 
                 "Accept": "application/json"
             }
