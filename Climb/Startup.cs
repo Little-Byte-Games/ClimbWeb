@@ -1,5 +1,9 @@
+using System.Reflection;
 using Climb.Data;
+using Climb.Extensions;
 using Climb.Services;
+using Climb.Services.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -7,9 +11,9 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using NJsonSchema;
 using NSwag.AspNetCore;
-using System.Reflection;
 
 namespace Climb
 {
@@ -31,14 +35,33 @@ namespace Climb
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc()
-                .AddRazorPagesOptions(options =>
+            services.AddAuthentication(options =>
                 {
-                    options.Conventions.AuthorizeFolder("/Account/Manage");
-                    options.Conventions.AuthorizePage("/Account/Logout");
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = "climb.com",
+                        ValidateAudience = true,
+                        ValidAudience = "climb",
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = Configuration.GetSecurityKey(),
+                        ValidateLifetime = true,
+                    };
+                    options.SaveToken = true;
                 });
 
+            services.AddMvc();
+
+            services.AddTransient<IApplicationUserRepository, ApplicationUserRepository>();
+
             services.AddSingleton<IEmailSender, EmailSender>();
+            services.AddTransient<ITokenHelper, TokenHelper>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -54,16 +77,11 @@ namespace Climb
                 });
                 app.UseDatabaseErrorPage();
             }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
-
-            app.UseStaticFiles();
-
-            app.UseSwaggerUi(typeof(Startup).GetTypeInfo().Assembly, settings => settings.GeneratorSettings.DefaultPropertyNameHandling = PropertyNameHandling.CamelCase);
 
             app.UseAuthentication();
+            app.UseStaticFiles();
+            app.UseSwaggerUi(typeof(Startup).GetTypeInfo().Assembly,
+                settings => settings.GeneratorSettings.DefaultPropertyNameHandling = PropertyNameHandling.CamelCase);
             app.UseMvc();
         }
     }

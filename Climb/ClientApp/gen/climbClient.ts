@@ -7,13 +7,19 @@
 // ReSharper disable InconsistentNaming
 
 export module ClimbClient {
+export class BaseClass {
+    getAuthorizationToken() {
+        return localStorage.getItem("jwt");
+    }
+}
 
-export class AccountClient {
+export class AccountClient extends BaseClass {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
         this.http = http ? http : <any>window;
         this.baseUrl = baseUrl ? baseUrl : "http://localhost:52912";
     }
@@ -23,14 +29,16 @@ export class AccountClient {
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
-            method: "POST",
+            method: "GET",
             headers: {
                 "Content-Type": "application/json", 
                 "Accept": "application/json"
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processIndex(_response);
         });
     }
@@ -73,7 +81,9 @@ export class AccountClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processRegister(_response);
         });
     }
@@ -100,7 +110,7 @@ export class AccountClient {
         return Promise.resolve<ApplicationUser | null>(<any>null);
     }
 
-    logIn(email: string | null, password: string | null): Promise<void> {
+    logIn(email: string | null, password: string | null): Promise<LoginResponse> {
         let url_ = this.baseUrl + "/api/v1/account/logIn?";
         if (email === undefined)
             throw new Error("The parameter 'email' must be defined.");
@@ -116,15 +126,18 @@ export class AccountClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json", 
+                "Accept": "application/json"
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processLogIn(_response);
         });
     }
 
-    protected processLogIn(response: Response): Promise<void> {
+    protected processLogIn(response: Response): Promise<LoginResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 400) {
@@ -133,14 +146,59 @@ export class AccountClient {
             });
         } else if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? LoginResponse.fromJS(resultData200) : new LoginResponse();
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(<any>null);
+        return Promise.resolve<LoginResponse>(<any>null);
+    }
+
+    test(authorization: string | null | undefined, userId: string | null): Promise<string | null> {
+        let url_ = this.baseUrl + "/api/v1/account/test?";
+        if (userId === undefined)
+            throw new Error("The parameter 'userId' must be defined.");
+        else
+            url_ += "userId=" + encodeURIComponent("" + userId) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Authorization": authorization !== undefined && authorization !== null ? "" + authorization : "", 
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processTest(_response);
+        });
+    }
+
+    protected processTest(response: Response): Promise<string | null> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<string | null>(<any>null);
     }
 
     logout(): Promise<FileResponse | null> {
@@ -155,7 +213,9 @@ export class AccountClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processLogout(_response);
         });
     }
@@ -177,12 +237,13 @@ export class AccountClient {
     }
 }
 
-export class UserClient {
+export class UserClient extends BaseClass {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
         this.http = http ? http : <any>window;
         this.baseUrl = baseUrl ? baseUrl : "http://localhost:52912";
     }
@@ -199,7 +260,9 @@ export class UserClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processIndex(_response);
         });
     }
@@ -221,12 +284,13 @@ export class UserClient {
     }
 }
 
-export class SampleDataClient {
+export class SampleDataClient extends BaseClass {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
         this.http = http ? http : <any>window;
         this.baseUrl = baseUrl ? baseUrl : "http://localhost:52912";
     }
@@ -243,7 +307,9 @@ export class SampleDataClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processWeatherForecasts(_response);
         });
     }
@@ -419,6 +485,42 @@ export class ApplicationUser extends IdentityUser implements IApplicationUser {
 }
 
 export interface IApplicationUser extends IIdentityUser {
+}
+
+export class LoginResponse implements ILoginResponse {
+    token?: string | undefined;
+
+    constructor(data?: ILoginResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.token = data["token"];
+        }
+    }
+
+    static fromJS(data: any): LoginResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new LoginResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["token"] = this.token;
+        return data; 
+    }
+}
+
+export interface ILoginResponse {
+    token?: string | undefined;
 }
 
 export class WeatherForecast implements IWeatherForecast {
