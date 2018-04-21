@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Climb.Attributes;
 using Climb.Data;
 using Climb.Extensions;
 using Climb.Requests;
@@ -35,6 +36,7 @@ namespace Climb.Controllers
         }
 
         [HttpGet("/account/{*page}")]
+        [SwaggerIgnore]
         public IActionResult Index()
         {
             ViewData["Title"] = "Account";
@@ -72,8 +74,8 @@ namespace Climb.Controllers
             return BadRequest();
         }
 
-        [AllowAnonymous]
         [HttpPost("/api/v1/account/logIn")]
+        [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.BadRequest, null)]
         [SwaggerResponse(HttpStatusCode.OK, typeof(LoginResponse), IsNullable = false)]
         public async Task<IActionResult> LogIn(string email, string password)
@@ -92,14 +94,14 @@ namespace Climb.Controllers
             return BadRequest();
         }
 
+        [HttpGet("/api/v1/account/test")]
         [Authorize]
         [SwaggerResponse(HttpStatusCode.OK, typeof(string))]
-        [HttpGet("/api/v1/account/test")]
-        public async Task<IActionResult> Test([FromHeader(Name = "Authorization")] string authorization, string userId)
+        public async Task<IActionResult> Test([UserToken] string auth, string userID)
         {
-            var authorizedId = await tokenHelper.GetAuthorizedUserID(authorization);
+            var authorizedId = await tokenHelper.GetAuthorizedUserID(auth);
 
-            if(userId == authorizedId)
+            if(userID == authorizedId || string.IsNullOrWhiteSpace(userID))
             {
                 return Ok("Authorized!");
             }
@@ -107,9 +109,9 @@ namespace Climb.Controllers
             return BadRequest("Not the same user!");
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
+        [HttpPost("/api/v1/account/logOut")]
+        [SwaggerResponse(HttpStatusCode.OK, typeof(string))]
+        public async Task<IActionResult> Logout([UserToken] string auth)
         {
             await signInManager.SignOutAsync();
             logger.LogInformation("User logged out.");

@@ -24,41 +24,6 @@ export class AccountClient extends BaseClass {
         this.baseUrl = baseUrl ? baseUrl : "http://localhost:52912";
     }
 
-    index(): Promise<FileResponse | null> {
-        let url_ = this.baseUrl + "/account";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ = <RequestInit>{
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            }
-        };
-
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
-            return this.processIndex(_response);
-        });
-    }
-
-    protected processIndex(response: Response): Promise<FileResponse | null> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<FileResponse | null>(<any>null);
-    }
-
     register(email: string | null, password: string | null, confirmPassword: string | null | undefined): Promise<ApplicationUser | null> {
         let url_ = this.baseUrl + "/api/v1/account/register?";
         if (email === undefined)
@@ -159,12 +124,12 @@ export class AccountClient extends BaseClass {
         return Promise.resolve<LoginResponse>(<any>null);
     }
 
-    test(authorization: string | null | undefined, userId: string | null): Promise<string | null> {
+    test(authorization: string | null | undefined, userID: string | null): Promise<string | null> {
         let url_ = this.baseUrl + "/api/v1/account/test?";
-        if (userId === undefined)
-            throw new Error("The parameter 'userId' must be defined.");
+        if (userID === undefined)
+            throw new Error("The parameter 'userID' must be defined.");
         else
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&"; 
+            url_ += "userID=" + encodeURIComponent("" + userID) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -201,13 +166,14 @@ export class AccountClient extends BaseClass {
         return Promise.resolve<string | null>(<any>null);
     }
 
-    logout(): Promise<FileResponse | null> {
-        let url_ = this.baseUrl + "/api/Account";
+    logout(authorization: string | null | undefined): Promise<string | null> {
+        let url_ = this.baseUrl + "/api/v1/account/logOut";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
             method: "POST",
             headers: {
+                "Authorization": authorization !== undefined && authorization !== null ? "" + authorization : "", 
                 "Content-Type": "application/json", 
                 "Accept": "application/json"
             }
@@ -220,20 +186,22 @@ export class AccountClient extends BaseClass {
         });
     }
 
-    protected processLogout(response: Response): Promise<FileResponse | null> {
+    protected processLogout(response: Response): Promise<string | null> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse | null>(<any>null);
+        return Promise.resolve<string | null>(<any>null);
     }
 }
 
